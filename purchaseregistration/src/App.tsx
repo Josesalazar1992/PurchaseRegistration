@@ -26,16 +26,21 @@ function App() {
 export default App; */
 
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import PurchaseOrderApp from './Components/PurchaseOrderApp';
+import LoginPage from './Components/Loginpage';
+import MainPage from './Components/MainPage';
 
-function App() {
+
+const App: React.FC = () => {
   return (
-      <div className="App">
-        <PurchaseOrderApp/> {/* Llama a PurchaseOrderApp como componente principal */}
-      </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/home" element={<MainPage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

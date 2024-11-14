@@ -4,10 +4,8 @@ import '../heartloading.css';  // Asegúrate de tener el archivo CSS de la anima
 
 const MainPage: React.FC = () => {
   const [loading, setLoading] = useState(true);  // Estado de carga
-  const [orders, setOrders] = useState<any[]>([]); // Estado para las órdenes
-  const [clients, setClients] = useState<any[]>([]); // Estado para los clientes
-  const [products, setProducts] = useState<any[]>([]); // Estado para los productos
   const navigate = useNavigate();  // Hook de navegación
+  const [texto, setTexto] = useState<string>(''); // Estado para guardar el texto del cuadro "crear orden"
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,42 +14,16 @@ const MainPage: React.FC = () => {
     return () => clearTimeout(timer);  // Limpia el temporizador cuando el componente se desmonta
   }, []);
 
-  // Funciones para manejar la creación de órdenes, clientes y productos
-  const handleCreateOrder = () => {
-    const newOrder = { id: orders.length + 1, date: new Date().toISOString() };
-    const updatedOrders = [...orders, newOrder];
-    setOrders(updatedOrders);
-    localStorage.setItem('orders', JSON.stringify(updatedOrders)); // Guardar en localStorage
-  };
-
-  const handleLoadOrders = () => {
-    const storedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    setOrders(storedOrders);
-  };
-
-  const handleAddClient = () => {
-    const newClient = { id: clients.length + 1, name: `Client ${clients.length + 1}` };
-    const updatedClients = [...clients, newClient];
-    setClients(updatedClients);
-    localStorage.setItem('clients', JSON.stringify(updatedClients)); // Guardar en localStorage
-  };
-
-  const handleAddProduct = () => {
-    const newProduct = { 
-      id: products.length + 1, 
-      serialNumber: `SN${products.length + 1}`, 
-      name: `Product ${products.length + 1}`,
-      description: `Description for product ${products.length + 1}`,
-      quantity: 1,
-      cost: 100 
-    };
-    const updatedProducts = [...products, newProduct];
-    setProducts(updatedProducts);
-    localStorage.setItem('products', JSON.stringify(updatedProducts)); // Guardar en localStorage
-  };
-
   const handleLogout = () => {
     navigate('/'); // Redirige a la página de login
+  };
+
+  const manejarCambio = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTexto(event.target.value); // Actualizar el estado con el valor del cuadro de texto
+  };
+
+  const manejarClick = () => {
+    alert(`Información guardada: ${texto}`); // Aquí podrías hacer algo con el texto, como enviarlo a una API
   };
 
   return (
@@ -63,19 +35,34 @@ const MainPage: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: loading ? 'black' : 'white',  // Fondo negro mientras carga, luego blanco
-        flexDirection: 'column'
       }}
     >
       {loading ? (
         <div className="heart"></div>  // Corazón de carga
       ) : (
         <div>
-          <strong>Excelente, ya estás aquí</strong>
-          <button onClick={handleLogout}>Logout</button>
-          <button onClick={handleCreateOrder}>Crear Orden</button>
-          <button onClick={handleLoadOrders}>Cargar Órdenes</button>
-          <button onClick={handleAddClient}>Agregar Cliente</button>
-          <button onClick={handleAddProduct}>Agregar Producto</button>
+            <div>
+          <button 
+                style={{
+                position: 'fixed',
+                top: '10px',
+                right: '10px',
+                padding: '10px 20px',
+                backgroundColor: '#ff4c4c',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+                }}
+            onClick={handleLogout}>Logout</button>
+            </div>
+            <button onClick={manejarClick}>Crear Orden</button>
+          <input
+            type="text" 
+            value={texto} 
+            onChange={manejarCambio} 
+            placeholder=" Ejemplo: 30/10/2024"
+          />
         </div>
       )}
     </div>

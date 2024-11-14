@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import loginpage from './images/loginpage.jpg'
+import loginpage from '../images/loginpage.jpg'
 import '../LoginPage.css';
 
 const LoginPage: React.FC = () => {

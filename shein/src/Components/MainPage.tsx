@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../heartloading.css"; // Archivo CSS para la animación del corazón
+import OrderManager from "./Order/CreateOrder";
+import DeleteOrder from "./Order/DeleteOrder";
 
 const MainPage: React.FC = () => {
   const [loading, setLoading] = useState(true); // Estado de carga
+  const [showOrderManager, setShowOrderManager] = useState(false); // Controla visibilidad de OrderManager
+  const [showDeleteOrder, setShowOrderToDelete] = useState(false); // Controla visibilidad de DeleteOrder
   const navigate = useNavigate(); // Hook de navegación
-  const [texto, setTexto] = useState<string>(""); // Estado para guardar el texto del cuadro "crear orden"
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,14 +19,6 @@ const MainPage: React.FC = () => {
 
   const handleLogout = () => {
     navigate("/"); // Redirige a la página de login
-  };
-
-  const manejarCambio = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTexto(event.target.value); // Actualizar el estado con el valor del cuadro de texto
-  };
-
-  const manejarClick = () => {
-    alert(`Información guardada: ${texto}`); // Aquí podrías hacer algo con el texto, como enviarlo a una API
   };
 
   return (
@@ -49,10 +44,16 @@ const MainPage: React.FC = () => {
             }}
           >
             <h3>Opciones</h3>
-            <button onClick={manejarClick} style={buttonStyle}>
+            <button
+              onClick={() => setShowOrderManager(true)}
+              style={buttonStyle}
+            >
               Crear Orden
             </button>
-            <button style={buttonStyle}>Borrar Orden</button>
+            <button onClick={() => setShowOrderToDelete(true) } 
+             style={buttonStyle}>
+              Borrar Orden
+              </button>
             <button style={buttonStyle}>Actualizar Orden</button>
           </div>
 
@@ -80,20 +81,13 @@ const MainPage: React.FC = () => {
               Logout
             </button>
             <h2>Contenido Principal</h2>
-            <p>Aquí se mostrará la información relacionada.</p>
-            <input
-              type="text"
-              value={texto}
-              onChange={manejarCambio}
-              placeholder="Ejemplo: 30/10/2024"
-              style={{
-                padding: "10px",
-                margin: "10px 0",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                width: "100%",
-              }}
-            />
+            {showOrderManager ? (
+              <OrderManager />
+            ) : showDeleteOrder ? (
+              <DeleteOrder />
+            ) : (
+              <p>Selecciona una opción del menú.</p>
+            )}
           </div>
         </>
       )}

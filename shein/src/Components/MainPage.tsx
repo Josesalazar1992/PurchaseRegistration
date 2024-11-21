@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import "../heartloading.css"; // Archivo CSS para la animación del corazón
 import OrderManager from "./Order/CreateOrder";
 import DeleteOrder from "./Order/DeleteOrder";
+import AddProduct from "./Order/AddProduct";
 
 const MainPage: React.FC = () => {
   const [loading, setLoading] = useState(true); // Estado de carga
   const [showOrderManager, setShowOrderManager] = useState(false); // Controla visibilidad de OrderManager
   const [showDeleteOrder, setShowOrderToDelete] = useState(false); // Controla visibilidad de DeleteOrder
+  const [showAddProduct, setshowAddProduct] = useState(false); // Controla visibilidad de AddProduct
   const navigate = useNavigate(); // Hook de navegación
 
   useEffect(() => {
@@ -45,16 +47,30 @@ const MainPage: React.FC = () => {
           >
             <h3>Opciones</h3>
             <button
-              onClick={() => setShowOrderManager(true)}
+              onClick={() =>{ 
+                setShowOrderManager(true);
+                setShowOrderToDelete(false);
+              }}
               style={buttonStyle}
             >
               Crear Orden
             </button>
-            <button onClick={() => setShowOrderToDelete(true) } 
+            <button onClick={() => {
+              setShowOrderToDelete(true); 
+              setShowOrderManager(false);
+            }}
              style={buttonStyle}>
               Borrar Orden
               </button>
             <button style={buttonStyle}>Actualizar Orden</button>
+            <button onClick={() => {
+              setshowAddProduct(true);
+              setShowOrderToDelete(false); 
+              setShowOrderManager(false);
+            }}
+             style={buttonStyle}>
+              Agregar Productos
+              </button>
           </div>
 
           {/* Contenido principal */}
@@ -85,6 +101,8 @@ const MainPage: React.FC = () => {
               <OrderManager />
             ) : showDeleteOrder ? (
               <DeleteOrder />
+            ) : showAddProduct ? (
+              <AddProduct />
             ) : (
               <p>Selecciona una opción del menú.</p>
             )}

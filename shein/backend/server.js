@@ -1,3 +1,6 @@
+// Pata iniciar el servidor navega a D:\IT things\Repo\PurchaseRegistration\shein\backend> y corre node server.js
+
+
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
@@ -56,6 +59,24 @@ app.delete("/orders", (req, res) => {
     res.status(404).json({ error: "Orden no encontrada." });
   }
 });
+
+// Agregar un producto a una orden
+app.post("/orders/:id/products", (req, res) => {
+  const { id } = req.params;
+  const { product } = req.body; // Producto enviado en el cuerpo de la solicitud
+  const orders = readOrders();
+
+  const order = orders.find(o => o.id === parseInt(id));
+  if (order) {
+    order.products = order.products || []; // Inicializar si no existe
+    order.products.push(product);
+    writeOrders(orders);
+    res.status(201).json(order);
+  } else {
+    res.status(404).json({ error: "Orden no encontrada." });
+  }
+});
+
 
 
 // Iniciar servidor
